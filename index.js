@@ -5,9 +5,7 @@ let frame = 0;
 const olives = [];
 const pipes = [];
 
-for(let i = 0; i < numPipes; i++) {
-    pipes.push(new Pipe(new Vector2((window.innerWidth / numPipes) * i, (window.innerHeight / 2) + (Math.random() * pipeVariation * 2) - pipeVariation)))
-}
+
 
 function resizeCanvas() {
     canvas.width = window.innerWidth;
@@ -26,9 +24,40 @@ function events() {
     })
 }
 
+function setupPipes() {
+    for(let i = 0; i < numPipes; i++) {
+        pipes[i] = new Pipe(new Vector2(((window.innerWidth / numPipes) * i) + 2 * window.innerWidth / 3, (window.innerHeight / 2) + (Math.random() * pipeVariation * 2) - pipeVariation));
+    }
+}
+
+function setupOlives() {
+    for(let i = 0; i < populationSize; i++) {
+        const variation = (Math.random() * 200) - 100
+        let olive = new Olive(new Vector2(window.innerWidth / 3, (window.innerHeight / 2) + variation));
+        olives[i] = olive;
+    }
+}
+
+function nextGeneration() {
+    // perform selection, crossover, mutation
+
+    setupOlives();
+
+    setupPipes();
+
+}
+
 function update() {
+    let alive = false;
     for(const olive of olives) {
         olive.update(frame);
+        if(!olive.crashed) {
+            alive = true;
+        }
+    }
+
+    if(!alive) {
+        nextGeneration();
     }
 
     for(let i = 0; i < pipes.length; i++) {
@@ -59,7 +88,9 @@ function update() {
         }
         else {
             if(pipe.pos.x < window.innerWidth / 3 && !pipe.scored) {
-                // add score
+                for(const olive of olives) {
+                    olive.score++;
+                }
                 pipe.scored = true;
             }
 
@@ -93,11 +124,8 @@ function draw() {
 function setup() {
     canvas = document.getElementById('canvas');
 
-    for(let i = 0; i < populationSize; i++) {
-        const variation = (Math.random() * 200) - 100
-        let olive = new Olive(new Vector2(window.innerWidth / 3, (window.innerHeight / 2) + variation));
-        olives.push(olive);
-    }
+    setupPipes();
+    setupOlives();    
 
     resizeCanvas();
 

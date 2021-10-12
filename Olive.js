@@ -8,6 +8,7 @@ class Olive {
         this.image.src = 'data/olive.png';
 
         this.crashed = false;
+        this.score = 0;
     }
 
     applyForce(force) {
