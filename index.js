@@ -12,7 +12,8 @@ Outputs:
 
 
 let canvas, ctx;
-let selectedOlive, prevHighestScore;
+let selectedOlive;
+let prevHighestScore = 0;
 
 let frame = 0;
 
@@ -301,7 +302,7 @@ function draw() {
 
     ctx.fillStyle = "white";
     ctx.font = "30px Arial";
-    ctx.fillText(`Previous Best Score: ${!!prevHighestScore ? prevHighestScore.score : '0'}`, rect.width - 500, 40);
+    ctx.fillText(`Previous Best Score: ${prevHighestScore}`, rect.width - 500, 40);
 
     const highestFitness = getCurrentHighestFitness();
     ctx.fillText(`Current highest score: ${highestFitness}`, rect.width - 500, 75);
