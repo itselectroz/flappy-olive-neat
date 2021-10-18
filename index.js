@@ -12,7 +12,7 @@ Outputs:
 
 
 let canvas, ctx;
-let selectedOlive, prevBestOlive;
+let selectedOlive, prevHighestScore;
 
 let frame = 0;
 
@@ -54,15 +54,13 @@ function nextGeneration() {
     // perform selection, crossover, mutation
 
     let highestScore = 0;
-    let bestOlive = null;
     for(const olive of olives) {
         if(olive.score > highestScore) {
             highestScore = olive.score;
-            bestOlive = olive;
         }
     }
 
-    prevBestOlive = bestOlive;
+    prevHighestScore = highestScore;
 
     // selection
     const selectionPool = [];
@@ -303,7 +301,7 @@ function draw() {
 
     ctx.fillStyle = "white";
     ctx.font = "30px Arial";
-    ctx.fillText(`Previous Best Score: ${!!prevBestOlive ? prevBestOlive.score : '0'}`, rect.width - 500, 40);
+    ctx.fillText(`Previous Best Score: ${!!prevHighestScore ? prevHighestScore.score : '0'}`, rect.width - 500, 40);
 
     const highestFitness = getCurrentHighestFitness();
     ctx.fillText(`Current highest score: ${highestFitness}`, rect.width - 500, 75);
